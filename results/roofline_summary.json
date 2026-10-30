@@ -1,0 +1,17 @@
+{
+  "kernel": "5-point Jacobi stencil",
+  "flops_per_cell": 5,
+  "dram_bytes_per_cell_ideal": 16,
+  "dram_bytes_per_cell_write_allocate": 24,
+  "arithmetic_intensity_flop_per_byte": 0.3125,
+  "arithmetic_intensity_write_allocate": 0.20833333333333334,
+  "working_set_bytes": 28901376,
+  "l3_bytes": 8388608,
+  "working_set_exceeds_l3": true,
+  "peak_gflops_assumed": 288.0,
+  "peak_bw_gbs_used": 5.078830322920741,
+  "measured_stream_like_bw_gbs": 5.078830322920741,
+  "ridge_point_flop_per_byte": 56.705970014445484,
+  "attainable_gflops": 1.5871344759127315,
+  "regime": "Memory-Bandwidth Bound"
+}
