@@ -46,9 +46,9 @@ Verification (master collected exactly 400,000 items per P, checksums match): **
 
 **Measured:** T1=8.77 s, T8=30.34 s (T8/T1 = 3.46x); e(2)=5.95, e(8)=3.81.
 
-**Explanation.** `multiprocessing.Queue.put` appends to a buffer; a background feeder thread in each worker pickles the item and writes it to a shared OS pipe guarded by a cross-process write lock. With P producers all writing single tiny items, they fight over that lock (each acquisition is a syscall and potentially a context switch), while the master's single `get()` loop - which also takes a read lock, unpickles one item at a time - is a strictly serial consumer. Total useful work per item is trivial (`i % 7`), so the run time is almost entirely synchronization: adding processes adds lock contention, scheduler switches and cache-line ping-pong without adding consumption capacity. That is negative scaling: Tp grows with p and e(p) grows with p.
+**Explanation.** `multiprocessing.Queue.put` appends to a buffer; a background feeder thread in each worker pickles the item and writes it to a shared OS pipe guarded by a cross-process write lock. With P producers all writing single tiny items, they fight over that lock (each acquisition is a syscall and potentially a context switch), while the master's single `get()` loop - which also takes a read lock, unpickles one item at a time - is a strictly serial consumer. Total useful work per item is trivial (`i % 7`), so the run time is almost entirely synchronization: adding processes adds lock contention, scheduler switches and cache-line ping-pong without adding consumption capacity. That is negative scaling: here T8 > T1, i.e. adding producers made the run slower.
 
-**Expected vs observed.** The handout quotes illustrative values (e.g. T1~1.2 s, T8~7.6 s, e(8)~6.28). Absolute times depend on CPU, Windows scheduler and Python version, so they will differ. What should carry over is the *shape*: T increasing with P and e(p) rising. **This run did NOT show a strictly monotonic increase / T8 > T1**; the numbers above are reported as measured and the deviation should be attributed to this machine's behaviour (e.g. master consumer speed vs. producer speed, scheduler effects) rather than adjusted.
+**Expected vs observed.** The handout quotes illustrative values (e.g. T1~1.2 s, T8~7.6 s, e(8)~6.28). Absolute times depend on CPU, Windows scheduler and Python version, so they will differ. What should carry over is the *shape*: T increasing with P and e(p) rising. Measured runtime jumped from 8.77 s (P=1) to about 30-31 s for P=2, 4 and 8, so T8 > T1 and negative scaling is confirmed. The increase was a one-time step followed by a plateau, not a monotonic rise, and e(p) decreased (5.95 -> 4.38 -> 3.81) because Tp stayed roughly constant while p grew. This differs from the handout's expected shape. A plausible explanation (not isolated experimentally) is that once more than one producer shares the pipe, throughput is limited by a single serialized channel (write lock plus the master's single get() loop), so extra workers add contention but no capacity.
 
 ## D. Experiment C - Local Buffer Chunking (10,000,000 items, batch 10,000)
 
@@ -72,7 +72,7 @@ Verification (totals equal closed-form expected sums): **PASS**.
 | A: Micro (k=1) | 34.35 | 34.08 | 36.43 | 38.29 | 0.90 | 0.984 | 1.131 | High e -> dispatch/IPC overhead |
 | A: Coarse Chunk (k=10,000) | 11.90 | 6.11 | 3.46 | 2.52 | 4.72 | 0.027 | 0.099 | Flat/low e -> healthy scaling |
 | B: Queue Choke | 8.77 | 30.48 | 30.98 | 30.34 | 0.29 | 5.953 | 3.812 | IPC lock contention explosion |
-| C: Buffered Batch | 1.03 | 0.58 | 0.41 | 0.38 | 2.72 | 0.121 | 0.278 | Overhead remains (see note) |
+| C: Buffered Batch | 1.03 | 0.58 | 0.41 | 0.38 | 2.72 | 0.121 | 0.278 | Synchronization amortized; start-up and SMT limit S8 |
 
 All times in seconds. Workloads differ (A: 1M items, B: 400k, C: 10M), so compare shapes (S8, e(p)), not raw times.
 
@@ -93,3 +93,4 @@ Handout targets for comparison (not measured here): B should show T8 > T1 and ri
 
 **Theoretical expectation (not a measurement):** well-amortized CPU-bound work should scale close to the number of *physical* cores, with a small, flat e(p); communication-bound work should show e(p) that grows with p. Any difference between those expectations and the table is attributable to the hardware, the OS scheduler, SMT (logical vs physical cores) and the Python/spawn startup cost, and is reported here as observed rather than adjusted.
 
+The handout's targets for Experiment C (S8 > 5, e(8) <= 0.05) were not met on this 6-core/12-thread laptop (measured S8 = 2.72, e(8) = 0.278). Likely contributors are Windows process start-up included in the timer and P=8 sharing physical cores; these were not measured separately.
