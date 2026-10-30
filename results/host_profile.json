@@ -1,0 +1,28 @@
+{
+  "cpu": {
+    "model": "AMD Ryzen 5 4600H with Radeon Graphics",
+    "microarchitecture": "AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD",
+    "base_freq_mhz": 3000,
+    "physical_cores": 6,
+    "logical_threads": 12,
+    "smt_enabled": true,
+    "threads_per_core": 2
+  },
+  "cache": {
+    "l1d_bytes": 393216,
+    "l2_bytes": 3145728,
+    "l3_bytes": 8388608,
+    "line_bytes": 64
+  },
+  "os": {
+    "system": "Windows",
+    "kernel": "10",
+    "version": "10.0.19045",
+    "machine": "AMD64"
+  },
+  "python": {
+    "implementation": "CPython",
+    "version": "3.13.15 (tags/v3.13.15:4061bc4, Aug  5 2026, 13:05:39) [MSC v.1944 64 bit (AMD64)]",
+    "compiler": "MSC v.1944 64 bit (AMD64)"
+  }
+}
