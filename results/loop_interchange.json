@@ -1,0 +1,22 @@
+{
+  "N": 1344,
+  "M": 672,
+  "numba": true,
+  "t_naive_ijk_s": 0.3967598000308499,
+  "t_interchanged_ikj_s": 0.061056199949234724,
+  "runs_naive_s": [
+    0.3967598000308499,
+    0.39733690000139177,
+    0.39486600004602224
+  ],
+  "runs_interchanged_s": [
+    0.061056199949234724,
+    0.05768770002759993,
+    0.06125670007895678
+  ],
+  "speedup": 6.498272089660615,
+  "max_abs_diff": 0.0,
+  "within_1e-12": true,
+  "digest_naive": "802a754b8eb7f42d7eabeaa22f065dd480bb7f9e628e971c9244bd132cc278c4",
+  "digest_interchanged": "802a754b8eb7f42d7eabeaa22f065dd480bb7f9e628e971c9244bd132cc278c4"
+}
