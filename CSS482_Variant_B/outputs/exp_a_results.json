@@ -1,0 +1,94 @@
+{
+  "env": {
+    "cpu_name": "AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD",
+    "student_id": "230103216",
+    "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "os": "Windows 10 (10.0.19045)",
+    "machine": "AMD64",
+    "processor": "AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD",
+    "os_cpu_count": 12,
+    "mp_cpu_count": 12,
+    "start_method": "spawn",
+    "available_start_methods": [
+      "spawn"
+    ]
+  },
+  "quick": false,
+  "total_items": 1000000,
+  "rows": [
+    {
+      "config": "Micro (k=1)",
+      "chunk": 1,
+      "p": 1,
+      "time": 34.351978099904954,
+      "speedup": 1.0,
+      "efficiency": 100.0,
+      "karp_flatt": null
+    },
+    {
+      "config": "Micro (k=1)",
+      "chunk": 1,
+      "p": 2,
+      "time": 34.08178010000847,
+      "speedup": 1.0079279309679137,
+      "efficiency": 50.396396548395685,
+      "karp_flatt": 0.9842688535076105
+    },
+    {
+      "config": "Micro (k=1)",
+      "chunk": 1,
+      "p": 4,
+      "time": 36.43052979989443,
+      "speedup": 0.9429447852829332,
+      "efficiency": 23.57361963207333,
+      "karp_flatt": 1.0806766428003838
+    },
+    {
+      "config": "Micro (k=1)",
+      "chunk": 1,
+      "p": 8,
+      "time": 38.288154200068675,
+      "speedup": 0.8971959818278036,
+      "efficiency": 11.214949772847545,
+      "karp_flatt": 1.1309527782805653
+    },
+    {
+      "config": "Coarse (k=10,000)",
+      "chunk": 10000,
+      "p": 1,
+      "time": 11.901121699949726,
+      "speedup": 1.0,
+      "efficiency": 100.0,
+      "karp_flatt": null
+    },
+    {
+      "config": "Coarse (k=10,000)",
+      "chunk": 10000,
+      "p": 2,
+      "time": 6.111922499956563,
+      "speedup": 1.9471977434324972,
+      "efficiency": 97.35988717162486,
+      "karp_flatt": 0.027117048972347124
+    },
+    {
+      "config": "Coarse (k=10,000)",
+      "chunk": 10000,
+      "p": 4,
+      "time": 3.4554176999954507,
+      "speedup": 3.4441919134596652,
+      "efficiency": 86.10479783649163,
+      "karp_flatt": 0.05379182311418007
+    },
+    {
+      "config": "Coarse (k=10,000)",
+      "chunk": 10000,
+      "p": 8,
+      "time": 2.5209062000503764,
+      "speedup": 4.720969665476606,
+      "efficiency": 59.01212081845757,
+      "karp_flatt": 0.09922387520459165
+    }
+  ],
+  "sum": 131434424,
+  "verified": true
+}

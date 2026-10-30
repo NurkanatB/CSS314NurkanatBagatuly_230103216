@@ -1,0 +1,33 @@
+=== Part 0: Environment Introspection ===
+Student ID           : 230103216
+Python               : 3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]
+Operating system     : Windows 10 (10.0.19045)
+CPU                  : AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD
+Machine / processor  : AMD64 / AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD
+os.cpu_count()       : 12
+mp.cpu_count()       : 12
+MP start method      : spawn (available: ['spawn'])
+
+=== Experiment A: Granularity Trap | items=1,000,000 ===
+  finished Micro (k=1)        P=1  T=  34.352s  sum=131,434,424
+  finished Micro (k=1)        P=2  T=  34.082s  sum=131,434,424
+  finished Micro (k=1)        P=4  T=  36.431s  sum=131,434,424
+  finished Micro (k=1)        P=8  T=  38.288s  sum=131,434,424
+  finished Coarse (k=10,000)  P=1  T=  11.901s  sum=131,434,424
+  finished Coarse (k=10,000)  P=2  T=   6.112s  sum=131,434,424
+  finished Coarse (k=10,000)  P=4  T=   3.455s  sum=131,434,424
+  finished Coarse (k=10,000)  P=8  T=   2.521s  sum=131,434,424
+
+Configuration         P  Runtime(s)   Speedup   Eff(%)  Karp-Flatt
+------------------------------------------------------------------
+Micro (k=1)           1      34.352      1.00    100.0         n/a
+Micro (k=1)           2      34.082      1.01     50.4      0.9843
+Micro (k=1)           4      36.431      0.94     23.6      1.0807
+Micro (k=1)           8      38.288      0.90     11.2      1.1310
+Coarse (k=10,000)     1      11.901      1.00    100.0         n/a
+Coarse (k=10,000)     2       6.112      1.95     97.4      0.0271
+Coarse (k=10,000)     4       3.455      3.44     86.1      0.0538
+Coarse (k=10,000)     8       2.521      4.72     59.0      0.0992
+
+Verification: all 8 runs produced the same Collatz step sum (131,434,424) -> PASS
+Reference: sum of Collatz steps for n=1..1,000,000 is 131,434,424 -> PASS
