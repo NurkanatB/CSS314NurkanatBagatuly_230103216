@@ -1,0 +1,49 @@
+{
+  "env": {
+    "cpu_name": "AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD",
+    "student_id": "230103216",
+    "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "os": "Windows 10 (10.0.19045)",
+    "machine": "AMD64",
+    "processor": "AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD",
+    "os_cpu_count": 12,
+    "mp_cpu_count": 12,
+    "start_method": "spawn",
+    "available_start_methods": [
+      "spawn"
+    ]
+  },
+  "quick": false,
+  "total_items": 10000000,
+  "rows": [
+    {
+      "p": 1,
+      "time": 1.003252699971199,
+      "speedup": 1.0,
+      "efficiency": 100.0,
+      "karp_flatt": null
+    },
+    {
+      "p": 2,
+      "time": 0.5751975999446586,
+      "speedup": 1.7441879104984528,
+      "efficiency": 87.20939552492264,
+      "karp_flatt": 0.1466654412416155
+    },
+    {
+      "p": 4,
+      "time": 0.37765469995792955,
+      "speedup": 2.6565343952636113,
+      "efficiency": 66.41335988159028,
+      "karp_flatt": 0.1685737135735541
+    },
+    {
+      "p": 8,
+      "time": 0.37473689997568727,
+      "speedup": 2.67721887018943,
+      "efficiency": 33.465235877367874,
+      "karp_flatt": 0.2840250801776434
+    }
+  ],
+  "verified": true
+}

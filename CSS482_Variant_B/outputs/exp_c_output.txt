@@ -1,0 +1,24 @@
+=== Part 0: Environment Introspection ===
+Student ID           : 230103216
+Python               : 3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]
+Operating system     : Windows 10 (10.0.19045)
+CPU                  : AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD
+Machine / processor  : AMD64 / AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD
+os.cpu_count()       : 12
+mp.cpu_count()       : 12
+MP start method      : spawn (available: ['spawn'])
+
+=== Experiment C: Buffered Batches | items=10,000,000 batch=10,000 ===
+  P=1: T=   1.003s sum=29,999,994 expected=29,999,994 -> PASS
+  P=2: T=   0.575s sum=29,999,990 expected=29,999,990 -> PASS
+  P=4: T=   0.378s sum=29,999,988 expected=29,999,988 -> PASS
+  P=8: T=   0.375s sum=29,999,952 expected=29,999,952 -> PASS
+
+  P  Runtime(s)   Speedup   Eff(%)  Karp-Flatt
+----------------------------------------------
+  1       1.003      1.00    100.0         n/a
+  2       0.575      1.74     87.2      0.1467
+  4       0.378      2.66     66.4      0.1686
+  8       0.375      2.68     33.5      0.2840
+
+Verification: every total equals the closed-form expected sum -> PASS
