@@ -74,6 +74,7 @@ def main():
     max_err = float(np.max(np.abs(np.asarray(C1) - np.asarray(C2))))
     res = {"N": N, "M": M, "numba": HAVE_NUMBA,
            "t_naive_ijk_s": t_naive, "t_interchanged_ikj_s": t_int,
+           "naive_time_s": t_naive, "interchanged_time_s": t_int,
            "runs_naive_s": ts_n, "runs_interchanged_s": ts_i,
            "speedup": t_naive / t_int, "max_abs_diff": max_err,
            "within_1e-12": max_err <= 1e-12,

@@ -1,4 +1,4 @@
-stride	elements_touched	median_time_ns	latency_ns_per_element
+stride	elements_touched	median_time_ns	latency_ns
 1	16777216	40512100	2.4147
 2	8388608	15988800	1.9060
 4	4194304	12104100	2.8858

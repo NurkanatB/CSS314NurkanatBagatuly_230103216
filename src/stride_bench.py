@@ -23,7 +23,7 @@ def main():
         print(f"stride={s:4d} touched={touched:9d} median={med/1e6:9.3f} ms  {med/touched:7.3f} ns/elem")
     os.makedirs("results", exist_ok=True)
     with open("results/stride_results.tsv", "w") as f:
-        f.write("stride\telements_touched\tmedian_time_ns\tlatency_ns_per_element\n")
+        f.write("stride\telements_touched\tmedian_time_ns\tlatency_ns\n")
         for r in rows:
             f.write(f"{r[0]}\t{r[1]}\t{r[2]:.0f}\t{r[3]:.4f}\n")
 

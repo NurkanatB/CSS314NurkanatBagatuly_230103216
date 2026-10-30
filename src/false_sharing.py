@@ -82,10 +82,17 @@ def main():
             print(f"{m:10s} P={P} T={T:7.3f}s S={S:5.2f} e={e:7.4f} total={totals[(m, P)]} ok={exact[(m, P)]}")
     print(f"sanity: unpadded/padded T1 ratio = {T1['unpadded'] / T1['padded']:.2f} (should be ~1.0)")
     os.makedirs("results", exist_ok=True)
+    by = {(r[0], r[1]): r for r in rows}
+    cols = (["P", "K"] + [f"T_{m}_s" for m in MODES] + [f"S_{m}" for m in MODES] + [f"e_{m}" for m in MODES]
+            + [f"total_{m}" for m in MODES] + ["expected_total", "exact"])
     with open("results/false_sharing_karp_flatt.tsv", "w") as f:
-        f.write("variant\tP\tK\tmedian_time_s\tspeedup\tefficiency_pct\tkarp_flatt_e\ttotal\texpected\texact\n")
-        for r in rows:
-            f.write(f"{r[0]}\t{r[1]}\t{r[2]}\t{r[3]:.6f}\t{r[4]:.4f}\t{r[5]:.2f}\t{r[6]:.6f}\t{r[7]}\t{r[8]}\t{r[9]}\n")
+        f.write("\t".join(cols) + "\n")
+        for P in PS:
+            g = lambda m: by[(m, P)]
+            vals = ([P, K] + [f"{g(m)[3]:.6f}" for m in MODES] + [f"{g(m)[4]:.4f}" for m in MODES]
+                    + [f"{g(m)[6]:.6f}" for m in MODES] + [g(m)[7] for m in MODES]
+                    + [P * K, all(g(m)[9] for m in MODES)])
+            f.write("\t".join(str(v) for v in vals) + "\n")
 
 if __name__ == "__main__":
     main()

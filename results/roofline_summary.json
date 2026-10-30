@@ -13,5 +13,6 @@
   "measured_stream_like_bw_gbs": 6.075814777629594,
   "ridge_point_flop_per_byte": 11.25,
   "attainable_gflops": 8.0,
-  "regime": "Memory-Bandwidth Bound"
+  "regime": "Memory-Bandwidth Bound",
+  "arithmetic_intensity": 0.3125
 }

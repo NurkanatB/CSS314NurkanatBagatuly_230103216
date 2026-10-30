@@ -24,5 +24,9 @@
     "implementation": "CPython",
     "version": "3.13.15 (tags/v3.13.15:4061bc4, Aug  5 2026, 13:05:39) [MSC v.1944 64 bit (AMD64)]",
     "compiler": "MSC v.1944 64 bit (AMD64)"
-  }
+  },
+  "cpu_model": "AMD Ryzen 5 4600H with Radeon Graphics",
+  "physical_cores": 6,
+  "logical_threads": 12,
+  "cache_line_bytes": 64
 }

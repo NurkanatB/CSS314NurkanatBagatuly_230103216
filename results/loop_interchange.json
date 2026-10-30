@@ -18,5 +18,7 @@
   "max_abs_diff": 0.0,
   "within_1e-12": true,
   "digest_naive": "802a754b8eb7f42d7eabeaa22f065dd480bb7f9e628e971c9244bd132cc278c4",
-  "digest_interchanged": "802a754b8eb7f42d7eabeaa22f065dd480bb7f9e628e971c9244bd132cc278c4"
+  "digest_interchanged": "802a754b8eb7f42d7eabeaa22f065dd480bb7f9e628e971c9244bd132cc278c4",
+  "naive_time_s": 0.3967598000308499,
+  "interchanged_time_s": 0.061056199949234724
 }

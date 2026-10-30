@@ -130,6 +130,8 @@ def main():
         "python": {"implementation": platform.python_implementation(),
                    "version": sys.version, "compiler": platform.python_compiler()},
     }
+    prof.update({"cpu_model": prof["cpu"]["model"], "physical_cores": prof["cpu"]["physical_cores"],
+                 "logical_threads": prof["cpu"]["logical_threads"], "cache_line_bytes": prof["cache"]["line_bytes"]})
     json.dump(prof, open("results/host_profile.json", "w"), indent=2)
     json.dump(get_student_params(a.student_id), open("results/salted_params.json", "w"), indent=2)
     print(json.dumps(prof, indent=2))
