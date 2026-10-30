@@ -9,8 +9,8 @@
     "threads_per_core": 2
   },
   "cache": {
-    "l1d_bytes": 393216,
-    "l2_bytes": 3145728,
+    "l1d_bytes": 32768,
+    "l2_bytes": 524288,
     "l3_bytes": 8388608,
     "line_bytes": 64
   },
