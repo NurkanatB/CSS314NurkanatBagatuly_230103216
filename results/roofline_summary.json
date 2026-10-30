@@ -9,9 +9,9 @@
   "l3_bytes": 8388608,
   "working_set_exceeds_l3": true,
   "peak_gflops_assumed": 288.0,
-  "peak_bw_gbs_used": 51.2,
-  "measured_stream_like_bw_gbs": 11.617479951896753,
-  "ridge_point_flop_per_byte": 5.625,
-  "attainable_gflops": 16.0,
+  "peak_bw_gbs_used": 25.6,
+  "measured_stream_like_bw_gbs": 6.075814777629594,
+  "ridge_point_flop_per_byte": 11.25,
+  "attainable_gflops": 8.0,
   "regime": "Memory-Bandwidth Bound"
 }
