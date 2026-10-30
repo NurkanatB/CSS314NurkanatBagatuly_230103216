@@ -1,11 +1,29 @@
-import multiprocessing as mp, ctypes, time, statistics, os, json
+import multiprocessing as mp, ctypes, time, statistics, os, argparse
 
-K = 5_000_000
 PS = [1, 2, 4, 8]
-REPEATS = 3
 LINE_INTS = 8  # 64 bytes / 8 bytes
+MODES = ["unpadded", "padded", "privatized"]
 
-def worker(arr, idx, K, mode, bar):
+def cpu_plan():
+    """Logical CPU order: one thread per physical core first, SMT siblings last.
+    Assumes siblings are adjacent (0,1),(2,3),... as on Windows."""
+    try:
+        import psutil
+        logical = psutil.cpu_count(logical=True)
+        phys = psutil.cpu_count(logical=False) or logical
+    except ImportError:
+        return None
+    if logical == phys:
+        return list(range(logical))
+    return [2 * i for i in range(phys)] + [2 * i + 1 for i in range(phys)]
+
+def worker(arr, idx, K, mode, bar, cpu):
+    if cpu is not None:
+        try:
+            import psutil
+            psutil.Process().cpu_affinity([cpu])
+        except Exception:
+            pass
     bar.wait()
     if mode == "privatized":
         local = 0
@@ -14,15 +32,16 @@ def worker(arr, idx, K, mode, bar):
         arr[idx] = local            # single write
     else:
         for _ in range(K):
-            arr[idx] += 1           # unpadded/padded: hammer the shared slot
+            arr[idx] += 1           # hammer the shared slot
 
-def run(mode, P, ctx):
-    arr = ctx.RawArray(ctypes.c_int64, 8 + 8 * 8 + 8)   # lock-free; extra room for alignment
+def run(mode, P, K, ctx, plan):
+    arr = ctx.RawArray(ctypes.c_int64, 8 + 8 * 8 + 8)
     addr = ctypes.addressof(arr)
-    base = ((-addr) % 64) // 8                           # first index on a 64B boundary
-    stride = 1 if mode == "unpadded" else LINE_INTS      # padded + privatized -> own line
+    base = ((-addr) % 64) // 8                      # first index on a 64B boundary
+    stride = 1 if mode == "unpadded" else LINE_INTS
+    cpus = [plan[p % len(plan)] for p in range(P)] if plan else [None] * P
     bar = ctx.Barrier(P + 1)
-    procs = [ctx.Process(target=worker, args=(arr, base + p * stride, K, mode, bar))
+    procs = [ctx.Process(target=worker, args=(arr, base + p * stride, K, mode, bar, cpus[p]))
              for p in range(P)]
     for pr in procs: pr.start()
     bar.wait()
@@ -33,21 +52,35 @@ def run(mode, P, ctx):
     return t, total
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--k", type=int, default=5_000_000)
+    ap.add_argument("--repeats", type=int, default=5)
+    ap.add_argument("--no-affinity", action="store_true")
+    a = ap.parse_args()
+    K = a.k
+    plan = None if a.no_affinity else cpu_plan()
+    print("CPU affinity plan:", plan)
     ctx = mp.get_context()
-    rows, T1 = [], {}
-    for mode in ["unpadded", "padded", "privatized"]:
+    times = {(m, P): [] for m in MODES for P in PS}
+    exact = {(m, P): True for m in MODES for P in PS}
+    totals = {}
+    for r in range(a.repeats):                     # interleave variants to cancel drift
         for P in PS:
-            runs, total = [], None
-            for _ in range(REPEATS):
-                t, total = run(mode, P, ctx)
-                runs.append(t)
-            T = statistics.median(runs)
-            if P == 1: T1[mode] = T
-            S = T1[mode] / T
-            e = (P * T / T1[mode] - 1) / (P - 1) if P > 1 else float("nan")
-            ok = total == P * K
-            rows.append((mode, P, K, T, S, S / P * 100, e, total, P * K, ok))
-            print(f"{mode:10s} P={P} T={T:7.3f}s S={S:5.2f} e={e:7.4f} total={total} ok={ok}")
+            for m in MODES:
+                t, total = run(m, P, K, ctx, plan)
+                times[(m, P)].append(t)
+                totals[(m, P)] = total
+                exact[(m, P)] &= (total == P * K)
+        print(f"repeat {r + 1}/{a.repeats} done")
+    rows, T1 = [], {m: statistics.median(times[(m, 1)]) for m in MODES}
+    for m in MODES:
+        for P in PS:
+            T = statistics.median(times[(m, P)])
+            S = T1[m] / T
+            e = (P * T / T1[m] - 1) / (P - 1) if P > 1 else float("nan")
+            rows.append((m, P, K, T, S, S / P * 100, e, totals[(m, P)], P * K, exact[(m, P)]))
+            print(f"{m:10s} P={P} T={T:7.3f}s S={S:5.2f} e={e:7.4f} total={totals[(m, P)]} ok={exact[(m, P)]}")
+    print(f"sanity: unpadded/padded T1 ratio = {T1['unpadded'] / T1['padded']:.2f} (should be ~1.0)")
     os.makedirs("results", exist_ok=True)
     with open("results/false_sharing_karp_flatt.tsv", "w") as f:
         f.write("variant\tP\tK\tmedian_time_s\tspeedup\tefficiency_pct\tkarp_flatt_e\ttotal\texpected\texact\n")
