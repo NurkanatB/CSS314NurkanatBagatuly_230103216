@@ -1,0 +1,27 @@
+=== Part 0: Environment Introspection ===
+Student ID           : 230103216
+Python               : 3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]
+Operating system     : Windows 10 (10.0.19045)
+CPU                  : AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD
+Machine / processor  : AMD64 / AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD
+os.cpu_count()       : 12
+mp.cpu_count()       : 12
+MP start method      : spawn (available: ['spawn'])
+
+=== Experiment B: Queue Contention | items=400,000 ===
+  P=1: T=   8.191s collected=400,000 checksum=1,199,997 -> PASS
+  P=2: T=  28.408s collected=400,000 checksum=1,199,988 -> PASS
+  P=4: T=  31.913s collected=400,000 checksum=1,199,980 -> PASS
+  P=8: T=  32.242s collected=400,000 checksum=1,199,976 -> PASS
+
+--- Queue Contention Karp-Flatt Analysis ---
+  P  Runtime(s)   Speedup     vs T1  Karp-Flatt
+-----------------------------------------------
+  1       8.191      1.00     1.00x         n/a
+  2      28.408      0.29     3.47x       5.936
+  4      31.913      0.26     3.90x       4.861
+  8      32.242      0.25     3.94x       4.356
+
+Verification: collected == 400,000 for every P, checksums match -> PASS
+Runtime strictly increases with P (T1<T2<T4<T8)? True
+T8 > T1 (negative scaling)? True
